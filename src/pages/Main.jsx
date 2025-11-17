@@ -1,19 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
 export function Main() {
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: "SUA_GOOGLE_MAPS_API_KEY_AQUI" // substitua por uma válida
+        googleMapsApiKey: "" 
     });
+
+    const [userLocation, setUserLocation] = useState(null);
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                () => {
+                    setUserLocation({
+                        lat: -23.550520,
+                        lng: -46.633308,
+                    });
+                }
+            );
+        } else {
+            alert("Geolocalização não suportada pelo navegador.");
+            setUserLocation({
+                lat: -23.550520,
+                lng: -46.633308,
+            });
+        }
+    }, []);
 
     const containerStyle = {
         width: "100%",
         height: "100%"
-    };
-
-    const center = {
-        lat: -23.550520, // Exemplo: São Paulo
-        lng: -46.633308
     };
 
     return (
@@ -21,11 +43,11 @@ export function Main() {
 
             {/* Mapa */}
             <div className="flex-1">
-                {isLoaded ? (
-                    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={14} />
+                {isLoaded && userLocation ? (
+                    <GoogleMap mapContainerStyle={containerStyle} center={userLocation} zoom={16} />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-300">
-                        <p className="text-gray-700 font-semibold">Carregando mapa...</p>
+                        <p className="text-gray-700 font-semibold">Carregando localização...</p>
                     </div>
                 )}
             </div>
