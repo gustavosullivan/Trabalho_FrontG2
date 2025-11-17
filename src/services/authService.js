@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+
+//Alterar após a API estar finalizada para mapear o o login
 const API_URL = 'https://ripe-donella-atitus-fbbf314a.koyeb.app/auth';
 
 export async function signIn(email, password) {
