@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "../components";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { getPoints, postPoint } from '../services/mapService';
@@ -9,22 +9,44 @@ const containerStyle = {
   height: "100%",
 };
 
-// Como pegar a posição atual do usuário?
-// Dica: use Geolocation API do navegador
-const center = {
-  lat: -23.55052,
-  lng: -46.633308,
-};
-
 export const Map = () => {
   const { token } = useAuth();
   const [markers, setMarkers] = useState([]);
+  const [userLocation, setUserLocation] = useState(null); // Armazena a localização do usuário
   
-  // Substitua pela sua chave da API do Google Maps
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Sua chave de API do Google Maps
   });
 
+  // Tentar obter a localização do usuário
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        () => {
+          // Caso não consiga obter a geolocalização, usa a localização padrão
+          setUserLocation({
+            lat: -23.550520,  // São Paulo (padrão)
+            lng: -46.633308,
+          });
+        }
+      );
+    } else {
+      alert("Geolocalização não suportada pelo navegador.");
+      // Caso o navegador não suporte geolocalização, usa a localização padrão
+      setUserLocation({
+        lat: -23.550520,  // São Paulo (padrão)
+        lng: -46.633308,
+      });
+    }
+  }, []);
+
+  // Carregar os pontos do mapa (caso haja um backend)
   useEffect(() => {
     async function fetchMarkers() {
       try {
@@ -34,7 +56,9 @@ export const Map = () => {
         console.log(error.message);
       }
     }
-    fetchMarkers();
+    if (token) {
+      fetchMarkers();
+    }
   }, [token]);
 
   // Função para adicionar ponto ao clicar no mapa
@@ -48,9 +72,7 @@ export const Map = () => {
     };
     try {
       const savedPoint = await postPoint(token, newPoint);
-      
-      // savedPoint vem com os campos id, latitude, longitude e descricao
-      // Precisamos transformar em um objeto com os campos id, title, position
+
       const savedMarker = {
         id: savedPoint.id,
         title: savedPoint.descricao || "Novo Ponto",
@@ -65,6 +87,15 @@ export const Map = () => {
     }
   };
 
+  // Se a geolocalização ainda não foi carregada, exibe uma tela de carregamento
+  if (!userLocation) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-gray-300">
+        <p className="text-gray-700 font-semibold">Carregando localização...</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar />
@@ -72,11 +103,12 @@ export const Map = () => {
         {isLoaded ? (
           <GoogleMap
             mapContainerStyle={containerStyle}
-            center={center}
+            center={userLocation} // Usa a localização do usuário ou padrão
             zoom={12}
             onClick={handleMapClick}
           >
-            {markers.map(marker => (
+            {/* Renderiza os marcadores */}
+            {markers.map((marker) => (
               <Marker
                 key={marker.id}
                 position={marker.position}

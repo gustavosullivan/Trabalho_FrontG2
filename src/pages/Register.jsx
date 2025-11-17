@@ -14,6 +14,7 @@ export function Register() {
         e.preventDefault();
         setErro("");
         try {
+         //   console.log("name: " + name)
             await signUp(name, email, senha);
             navigate("/login");
         } catch (err) {
