@@ -1,31 +1,26 @@
 import React from "react";
+import { Navbar } from "../components/Navbar";
 
 export function Calendary() {
   const hoje = new Date();
   const mes = hoje.getMonth();
   const ano = hoje.getFullYear();
 
-  // Nome dos meses
   const meses = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
-  // Descobre quantos dias o mês tem
   const diasNoMes = new Date(ano, mes + 1, 0).getDate();
 
-  // Descobre qual dia da semana começa
-  const primeiroDiaSemana = new Date(ano, mes, 1).getDay(); // 0 = Domingo
+  const primeiroDiaSemana = new Date(ano, mes, 1).getDay(); 
 
-  // Monta lista final com espaços vazios + dias
   const dias = [];
 
-  // Espaços antes do primeiro dia
   for (let i = 0; i < primeiroDiaSemana; i++) {
     dias.push("");
   }
 
-  // Dias do mês
   for (let d = 1; d <= diasNoMes; d++) {
     dias.push(d);
   }

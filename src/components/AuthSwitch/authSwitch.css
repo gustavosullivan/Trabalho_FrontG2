@@ -1,0 +1,40 @@
+.auth-switch {
+    width: 200px;
+    height: 40px;
+
+    margin: 20px auto;
+    padding: 4px;
+
+    background: rgba(255, 255, 255, 0.30);
+    backdrop-filter: blur(12px);
+
+    border-radius: 999px;
+    border: 0.3px solid #cbdbe794;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.auth-switch-option {
+  flex: 1;
+  height: 100%;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: white;
+
+  transition: 0.25s;
+}
+
+.auth-switch-option.active {
+  background: white;
+  color: #007BFF;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}

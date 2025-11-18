@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Navbar, Logo, Title, Input, Button } from "../components";
+import { Navbar, Logo, Title, Input, Button, AuthSwitch } from "../components";
 import { signIn } from "../services/authService";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import "./Login.css";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -23,15 +24,16 @@ export function Login() {
     }
   };
 
-  return (
-    <>
-      <div className="max-w-md mx-auto p-4">
-        <div className="text-center">
+   return (
+    <div className="login-background">
+      <AuthSwitch/>
+      <div className="login-card">
+        <div className="login-logo">
           <Logo />
         </div>
 
-        <div className="pt-6 pb-4">
-          <Title title="Faça seu cadastro" />
+        <div className="login-title">
+          <Title title="Acessar conta" />
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -45,6 +47,7 @@ export function Login() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
           <div className="pb-4">
             <Input
               label="Senha"
@@ -55,22 +58,19 @@ export function Login() {
               onChange={(e) => setSenha(e.target.value)}
             />
           </div>
+
           {erro && <p style={{ color: "red" }}>{erro}</p>}
 
           <div className="text-center pt-4">
-            <Button type="submit">Acessar</Button>
+            <Button type="submit">Entrar</Button>
           </div>
         </form>
 
-        <div className="text-center pt-8">
-          <Link
-            to="/register"
-            className="text-blue-600 hover:underline"
-          >
-            Faça seu cadastro
-          </Link>
+        <div className="login-footer">
+          <span>Não possui conta? </span>
+          <Link to="/register">Registre-se</Link>
         </div>
       </div>
-    </>
+    </div>
   );
 }

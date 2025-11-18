@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Navbar, Logo, Title, Input, Button } from "../components";
+import { Navbar, Logo, Title, Input, Button, AuthSwitch } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../services/authService";
+import "./Login.css";
 
 export function Register() {
     const [name, setName] = useState("");
@@ -23,61 +24,41 @@ export function Register() {
     };
 
     return (
-        <>
-            <div className="max-w-md mx-auto p-4">
-                <div className="text-center">
+        <div className="login-background">
+            <AuthSwitch/>
+            <div className="login-card">
+
+                <div className="login-logo">
                     <Logo />
                 </div>
 
-                <div className="pt-6 pb-4">
-                    <Title title="Bem-vindo de volta" />
+                <div className="login-title">
+                    <Title title="Criar conta" />
                 </div>
 
                 <form onSubmit={handleSubmit}>
                     <div className="pb-4">
-                        <Input
-                            label="Nome"
-                            placeholder="Digite seu nome..."
-                            type="text"
-                            required
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                        />
-                    </div>
-                    <div className="pb-4">
-                        <Input
-                            label="Email"
-                            placeholder="Digite seu email..."
-                            type="email"
-                            required
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="pb-4">
-                        <Input
-                            label="Senha"
-                            placeholder="Digite sua senha..."
-                            type="password"
-                            required
-                            value={senha}
-                            onChange={e => setSenha(e.target.value)}
-                        />
+                        <Input label="Nome" placeholder="Digite seu nome..." />
                     </div>
 
-                    {erro && <p style={{ color: "red" }}>{erro}</p>}
+                    <div className="pb-4">
+                        <Input label="Email" placeholder="Digite seu email..." />
+                    </div>
+
+                    <div className="pb-4">
+                        <Input label="Senha" placeholder="Digite sua senha..." />
+                    </div>
 
                     <div className="text-center pt-4">
                         <Button type="submit">Cadastrar</Button>
                     </div>
                 </form>
 
-                <div className="text-center pt-8">
-                    <Link to="/login" className="text-blue-600 hover:underline">
-                        Já tem cadastro? <strong>Faça Login</strong>
-                    </Link>
+                <div className="login-footer">
+                    Já tem cadastro? <Link to="/login">Entre agora</Link>
                 </div>
+
             </div>
-        </>
+        </div>
     );
 }

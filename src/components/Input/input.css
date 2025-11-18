@@ -1,9 +1,20 @@
 .input {
-    background-color: #ffffff;
-    border: 2px solid;
-    border-color: #000000;
-    border-radius: 10px;
-    height: 45px;
-    padding: 10px 20px;
-    width: 100%;
+  width: 100%;
+  padding: 14px;
+
+  background: rgba(255, 255, 255, 0.30); 
+  backdrop-filter: blur(6px);             
+
+  border: 1.5px solid rgba(255, 255, 255, 0.8);                     
+  border-radius: 14px;
+
+  font-size: 15px;
+  color: #01223A;                        
+
+  outline: none;
+  margin-top: 7px;
+}
+
+.input::placeholder {
+  color: rgba(1, 34, 58, 0.45);           
 }

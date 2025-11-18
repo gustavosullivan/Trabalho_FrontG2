@@ -1,4 +1,11 @@
 .title {
-    font-size: 24px;
-    font-weight: bold;
+  width: 100%;
+  text-align: center;         
+}
+
+.title .text-wrapper {
+  font-size: 20px;            
+  font-weight: 600;           
+  color: #0A2540;           
+  letter-spacing: -0.3px;       
 }

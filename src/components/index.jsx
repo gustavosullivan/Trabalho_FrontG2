@@ -4,5 +4,6 @@ import { Logo } from './Logo';
 import { Navbar } from './Navbar';
 import { Title } from './Title';
 import { PrivateRoute } from './PrivateRoute';
+import { AuthSwitch } from "./AuthSwitch";
 
-export { Button, Input, Logo, Navbar, Title, PrivateRoute };
+export { Button, Input, Logo, Navbar, Title, PrivateRoute, AuthSwitch };

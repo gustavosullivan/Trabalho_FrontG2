@@ -1,13 +1,37 @@
 import "./navbar.css";
-import { useAuth } from "../../contexts/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function Navbar() {
-    const { logout } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    return (
-        <header className="navbar">
-            <div>Nome do aplicativo</div>
-            <button className="close" onClick={logout}>X</button>
-        </header>
-    );
+  // Ajuste as rotas conforme seu Router
+  const isMap = location.pathname.startsWith("/main");
+  const isAgenda = location.pathname.startsWith("/agenda");
+  const isConfig = location.pathname.startsWith("/config");
+
+  return (
+    <nav className="navbar">
+      <button
+        className={`nav-item ${isMap ? "nav-item-active" : ""}`}
+        onClick={() => navigate("/main")}
+      >
+        <span className="nav-icon">📍</span>
+      </button>
+
+      <button
+        className={`nav-item ${isAgenda ? "nav-item-active" : ""}`}
+        onClick={() => navigate("/agenda")}
+      >
+        <span className="nav-icon">📅</span>
+      </button>
+
+      <button
+        className={`nav-item ${isConfig ? "nav-item-active" : ""}`}
+        onClick={() => navigate("/config")}
+      >
+        <span className="nav-icon">⚙️</span>
+      </button>
+    </nav>
+  );
 }

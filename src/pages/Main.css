@@ -1,0 +1,56 @@
+/* usa o mesmo “celular” azul, mas organiza tudo em coluna */
+.main-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+/* tela inteira do mapa dentro do “celular” */
+.main-screen {
+  position: relative;
+  width: 90%;
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;            /* arredonda o mapa */
+}
+
+/* barra de pesquisa sobre o mapa */
+.search-bar {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  right: 60px;                 /* deixa espaço pro botão de tela cheia */
+}
+
+.search-input {
+  width: 100%;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 0.5px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  color: #01223a;
+  outline: none;
+}
+
+/* posição da navbar sobre o mapa, lá embaixo */
+.bottom-nav-wrapper {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+}
+
+/* estado de carregamento */
+.main-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5f1ff;
+  color: #01345b;
+  font-weight: 500;
+}
