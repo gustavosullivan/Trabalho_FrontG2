@@ -8,14 +8,14 @@ const containerStyle = {
   width: "100%",
   height: "100%",
 };
-
 export const Map = () => {
+    //console.log("oi entrou aqu")
   const { token } = useAuth();
   const [markers, setMarkers] = useState([]);
   const [userLocation, setUserLocation] = useState(null); // Armazena a localização do usuário
-  
+
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Sua chave de API do Google Maps
+    googleMapsApiKey: 'import.meta.env.VITE_GOOGLE_MAPS_API_KEY', // Sua chave de API do Google Maps
   });
 
   // Tentar obter a localização do usuário
@@ -36,13 +36,6 @@ export const Map = () => {
           });
         }
       );
-    } else {
-      alert("Geolocalização não suportada pelo navegador.");
-      // Caso o navegador não suporte geolocalização, usa a localização padrão
-      setUserLocation({
-        lat: -23.550520,  // São Paulo (padrão)
-        lng: -46.633308,
-      });
     }
   }, []);
 

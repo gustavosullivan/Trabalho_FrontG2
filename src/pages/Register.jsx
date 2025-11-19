@@ -11,11 +11,11 @@ export function Register() {
     const [erro, setErro] = useState("");
     const navigate = useNavigate();
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErro("");
         try {
-         //   console.log("name: " + name)
             await signUp(name, email, senha);
             navigate("/login");
         } catch (err) {
@@ -38,16 +38,39 @@ export function Register() {
 
                 <form onSubmit={handleSubmit}>
                     <div className="pb-4">
-                        <Input label="Nome" placeholder="Digite seu nome..." />
+                        <Input
+                            label="Nome"
+                            placeholder="Digite seu nome..."
+                            type="text"
+                            required
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                        />
                     </div>
 
                     <div className="pb-4">
-                        <Input label="Email" placeholder="Digite seu email..." />
+                        <Input
+                            label="Email"
+                            placeholder="Digite seu email..."
+                            type="email"
+                            required
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
                     </div>
 
                     <div className="pb-4">
-                        <Input label="Senha" placeholder="Digite sua senha..." />
+                        <Input
+                            label="Senha"
+                            placeholder="Digite sua senha..."
+                            type="password"
+                            required
+                            value={senha}
+                            onChange={e => setSenha(e.target.value)}
+                        />
                     </div>
+
+                    {erro && <p style={{ color: "red" }}>{erro}</p>}
 
                     <div className="text-center pt-4">
                         <Button type="submit">Cadastrar</Button>
