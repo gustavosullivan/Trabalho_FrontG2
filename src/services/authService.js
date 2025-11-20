@@ -12,13 +12,13 @@ export async function signIn(email, password) {
     } catch (error) {
         if (error.response) {
             if (error.response.status === 400) {
-                throw new Error('Requisição inválida.');
+                throw new Error(error.response?.data);
             }
             if (error.response.status === 401) {
                 throw new Error('Usuário ou senha incorretos.');
             }
         }
-        throw new Error('Erro ao autenticar.');
+        throw new Error(error.response?.data);
     }
 }
 
