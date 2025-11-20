@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://ripe-donella-atitus-fbbf314a.koyeb.app/ws/point';
+const BASE_URL = 'https://hollow-christan-trabalhodados-24104763.koyeb.app/ws/point';
 
 
 
@@ -65,30 +65,35 @@ export async function getPoints(token) {
   }
 }
 
-export async function postPoint(token, pointData) {
-  try {
-    const response = await axios.post(BASE_URL, pointData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    // Mocked response
-    /*
-    const response = {
-      status: 200,
-      data: {
-      id: Math.floor(Math.random() * 10000),
-      ...pointData,
-      },
-    };
-    */
-    if (response.status === 201) {
-      return response.data;
-    } else {
-      throw new Error('Erro ao cadastrar ponto');
+export async function postPoint(token, pointData) {
+    try {
+
+        // Loga exatamente o corpo que será enviado
+        console.log("=== CORPO ENVIADO NA REQUISIÇÃO ===");
+        console.log(JSON.stringify(pointData, null, 2));
+
+        const response = await axios.post(BASE_URL, pointData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (response.status === 201) {
+            return response.data;
+        } else {
+            throw new Error("Erro ao cadastrar ponto");
+        }
+
+    } catch (error) {
+
+        console.log("=== ERRO AO ENVIAR ponto ===");
+        console.log("Error:", error);
+        console.log("Error.response:", error.response);
+        console.log("Error.response.status:", error.response?.status);
+        console.log("Error.response.data:", error.response?.data);
+        console.log("Error.message:", error.message);
+
+        throw new Error(error.response?.data?.message || "Erro ao cadastrar ponto");
     }
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Erro ao cadastrar ponto');
-  }
 }

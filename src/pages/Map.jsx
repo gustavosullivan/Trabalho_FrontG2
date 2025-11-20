@@ -15,7 +15,7 @@ export const Map = () => {
   const [userLocation, setUserLocation] = useState(null); // Armazena a localização do usuário
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: 'import.meta.env.VITE_GOOGLE_MAPS_API_KEY', // Sua chave de API do Google Maps
+    googleMapsApiKey: ''
   });
 
   // Tentar obter a localização do usuário
@@ -56,12 +56,18 @@ export const Map = () => {
 
   // Função para adicionar ponto ao clicar no mapa
   const handleMapClick = async (event) => {
-    const lat = event.latLng.lat();
+      let descricaoClique=prompt("Digite a descrição");
+      let nameUBS =prompt("Digite o nome da UBS")
+
+      const lat = event.latLng.lat();
     const lng = event.latLng.lng();
     const newPoint = {
       latitude: lat,
       longitude: lng,
-      descricao: "Descrição do ponto", // Você pode personalizar isso
+        name: nameUBS,
+        description: descricaoClique,
+
+
     };
     try {
       const savedPoint = await postPoint(token, newPoint);
@@ -80,7 +86,6 @@ export const Map = () => {
     }
   };
 
-  // Se a geolocalização ainda não foi carregada, exibe uma tela de carregamento
   if (!userLocation) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-gray-300">
