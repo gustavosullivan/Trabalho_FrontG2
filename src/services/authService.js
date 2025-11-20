@@ -2,8 +2,9 @@ import axios from 'axios';
 
 
 //Alterar após a API estar finalizada para mapear o o login
-const API_URL = 'https://hollow-christan-trabalhodados-24104763.koyeb.app/auth';
+const API_URL = 'https://hollow-christan-trabalhodados-24104763.koyeb.app/';
 
+//teste
 export async function signIn(email, password) {
     try {
         const response = await axios.post(`${API_URL}/signin`, { email, password });
@@ -28,6 +29,7 @@ export async function signUp(name, email, password) {
             { name, email, password }
         );
 
+        console.log(response);
         return response.data;
 
     } catch (error) {
