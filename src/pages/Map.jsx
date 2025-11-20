@@ -5,119 +5,150 @@ import { getPoints, postPoint } from '../services/mapService';
 import { useAuth } from "../contexts/AuthContext";
 
 const containerStyle = {
-  width: "100%",
-  height: "100%",
+    width: "100%",
+    height: "100%",
 };
+
 export const Map = () => {
-    //console.log("oi entrou aqu")
-  const { token } = useAuth();
-  const [markers, setMarkers] = useState([]);
-  const [userLocation, setUserLocation] = useState(null); // Armazena a localização do usuário
+    const { token } = useAuth();
+    const [markers, setMarkers] = useState([]);
+    const [userLocation, setUserLocation] = useState(null);
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: ''
-  });
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: "" // sua chave
+    });
 
-  // Tentar obter a localização do usuário
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
-        () => {
-          // Caso não consiga obter a geolocalização, usa a localização padrão
-          setUserLocation({
-            lat: -23.550520,  // São Paulo (padrão)
-            lng: -46.633308,
-          });
+    // Localização do usuário no início
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                () => {
+                    setUserLocation({
+                        lat: -23.550520,
+                        lng: -46.633308,
+                    });
+                }
+            );
         }
-      );
-    }
-  }, []);
+    }, []);
 
-  // Carregar os pontos do mapa (caso haja um backend)
-  useEffect(() => {
-    async function fetchMarkers() {
-      try {
-        const data = await getPoints(token);
-        setMarkers(data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-    if (token) {
-      fetchMarkers();
-    }
-  }, [token]);
+    // Carrega os pontos salvos do backend
+    useEffect(() => {
+        async function fetchMarkers() {
+            try {
+                const data = await getPoints(token);
 
-  // Função para adicionar ponto ao clicar no mapa
-  const handleMapClick = async (event) => {
-      let descricaoClique=prompt("Digite a descrição");
-      let nameUBS =prompt("Digite o nome da UBS")
+                // Ajusta o formato que virá do backend
+                const formatted = data.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    description: p.description,
+                    latitude: p.latitude,
+                    longitude: p.longitude,
+                    position: { lat: p.latitude, lng: p.longitude }
+                }));
 
-      const lat = event.latLng.lat();
-    const lng = event.latLng.lng();
-    const newPoint = {
-      latitude: lat,
-      longitude: lng,
-        name: nameUBS,
-        description: descricaoClique,
+                setMarkers(formatted);
 
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
 
+        if (token) fetchMarkers();
+    }, [token]);
+
+    // Clicar no mapa para adicionar ponto
+    const handleMapClick = async (event) => {
+        let descricaoClique = prompt("Digite a descrição");
+        let nameUBS = prompt("Digite o nome da UBS");
+
+        if (!descricaoClique || !nameUBS) return;
+
+        const lat = event.latLng.lat();
+        const lng = event.latLng.lng();
+
+        const newPoint = {
+            latitude: lat,
+            longitude: lng,
+            name: nameUBS,
+            description: descricaoClique,
+        };
+
+        try {
+            const savedPoint = await postPoint(token, newPoint);
+
+            const savedMarker = {
+                id: savedPoint.id,
+                name: savedPoint.name,
+                description: savedPoint.description,
+                latitude: savedPoint.latitude,
+                longitude: savedPoint.longitude,
+                position: {
+                    lat: savedPoint.latitude,
+                    lng: savedPoint.longitude,
+                },
+            };
+
+            setMarkers((prev) => [...prev, savedMarker]);
+
+        } catch (error) {
+            alert(error.message);
+        }
     };
-    try {
-      const savedPoint = await postPoint(token, newPoint);
 
-      const savedMarker = {
-        id: savedPoint.id,
-        title: savedPoint.descricao || "Novo Ponto",
-        position: {
-          lat: savedPoint.latitude,
-          lng: savedPoint.longitude,
-        },
-      };
-      setMarkers((prev) => [...prev, savedMarker]);
-    } catch (error) {
-      alert(error.message);
+    // Clicar em um ponto já salvo
+    const handleMarkerClick = (marker) => {
+        alert(`
+ID: ${marker.id}
+Nome: ${marker.name}
+Descrição: ${marker.description}
+Latitude: ${marker.latitude}
+Longitude: ${marker.longitude}
+    `);
+
+        console.log("PONTO CLICADO:", marker);
+    };
+
+    if (!userLocation) {
+        return (
+            <div className="w-full h-screen flex items-center justify-center bg-gray-300">
+                <p className="text-gray-700 font-semibold">Carregando localização...</p>
+            </div>
+        );
     }
-  };
 
-  if (!userLocation) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-gray-300">
-        <p className="text-gray-700 font-semibold">Carregando localização...</p>
-      </div>
+        <>
+            <Navbar />
+            <div style={{ width: "100%", height: "100%" }}>
+                {isLoaded ? (
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={userLocation}
+                        zoom={12}
+                        onClick={handleMapClick}
+                    >
+                        {/* Renderização dos pontos */}
+                        {markers.map((marker) => (
+                            <Marker
+                                key={marker.id}
+                                position={marker.position}
+                                title={marker.name}
+                                onClick={() => handleMarkerClick(marker)}
+                            />
+                        ))}
+                    </GoogleMap>
+                ) : (
+                    <div>Carregando mapa...</div>
+                )}
+            </div>
+        </>
     );
-  }
-
-  return (
-    <>
-      <Navbar />
-      <div style={{ width: "100%", height: "100%" }}>
-        {isLoaded ? (
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={userLocation} // Usa a localização do usuário ou padrão
-            zoom={12}
-            onClick={handleMapClick}
-          >
-            {/* Renderiza os marcadores */}
-            {markers.map((marker) => (
-              <Marker
-                key={marker.id}
-                position={marker.position}
-                title={marker.title}
-              />
-            ))}
-          </GoogleMap>
-        ) : (
-          <div>Carregando mapa...</div>
-        )}
-      </div>
-    </>
-  );
 };
