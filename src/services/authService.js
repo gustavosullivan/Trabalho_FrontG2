@@ -38,13 +38,13 @@ export async function signUp(name, email, password) {
 
         if (error.response) {
             if (error.response.status === 400) {
-                throw new Error("Requisição inválida.");
+                throw new Error(error.response?.data);
             }
             if (error.response.status === 409) {
-                throw new Error("Usuário já cadastrado.");
+                throw new Error(error.response?.data);
             }
         }
 
-        throw new Error("Erro ao cadastrar usuário.");
+        throw new Error(error.response?.data);
     }
 }
