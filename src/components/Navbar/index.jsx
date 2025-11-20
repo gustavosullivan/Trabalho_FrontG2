@@ -10,28 +10,5 @@ export function Navbar() {
   const isAgenda = location.pathname.startsWith("/agenda");
   const isConfig = location.pathname.startsWith("/config");
 
-  return (
-    <nav className="navbar">
-      <button
-        className={`nav-item ${isMap ? "nav-item-active" : ""}`}
-        onClick={() => navigate("/main")}
-      >
-        <span className="nav-icon">📍</span>
-      </button>
 
-      <button
-        className={`nav-item ${isAgenda ? "nav-item-active" : ""}`}
-        onClick={() => navigate("/agenda")}
-      >
-        <span className="nav-icon">📅</span>
-      </button>
-
-      <button
-        className={`nav-item ${isConfig ? "nav-item-active" : ""}`}
-        onClick={() => navigate("/config")}
-      >
-        <span className="nav-icon">⚙️</span>
-      </button>
-    </nav>
-  );
 }

@@ -15,7 +15,7 @@ export const Map = () => {
     const [userLocation, setUserLocation] = useState(null);
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: "" // sua chave
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // sua chave
     });
 
     // Localização do usuário no início
