@@ -37,9 +37,8 @@ export async function getPoints(token) {
 export async function postPoint(token, pointData) {
     try {
 
-        // Loga exatamente o corpo que será enviado
-        console.log("=== CORPO ENVIADO NA REQUISIÇÃO ===");
-        console.log(JSON.stringify(pointData, null, 2));
+        // console.log("=== CORPO ENVIADO NA REQUISIÇÃO ===");
+        // console.log(JSON.stringify(pointData, null, 2));
 
         const response = await axios.post(BASE_URL, pointData, {
             headers: {
@@ -55,12 +54,12 @@ export async function postPoint(token, pointData) {
 
     } catch (error) {
 
-        console.log("=== ERRO AO ENVIAR ponto ===");
-        console.log("Error:", error);
-        console.log("Error.response:", error.response);
-        console.log("Error.response.status:", error.response?.status);
-        console.log("Error.response.data:", error.response?.data);
-        console.log("Error.message:", error.message);
+        // console.log("=== ERRO AO ENVIAR ponto ===");
+        // console.log("Error:", error);
+        // console.log("Error.response:", error.response);
+        // console.log("Error.response.status:", error.response?.status);
+        // console.log("Error.response.data:", error.response?.data);
+        // console.log("Error.message:", error.message);
 
         throw new Error(error.response?.data?.message || "Erro ao cadastrar ponto");
     }

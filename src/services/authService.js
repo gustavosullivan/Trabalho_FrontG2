@@ -28,12 +28,11 @@ export async function signUp(name, email, password) {
             { name, email, password }
         );
 
-        console.log(response);
         return response.data;
 
     } catch (error) {
-        console.log("ERRO DA API:", error.response?.data);
-        console.log("STATUS:", error.response?.status);
+        // console.log("ERRO DA API:", error.response?.data);
+        // console.log("STATUS:", error.response?.status);
 
         if (error.response) {
             if (error.response.status === 400) {

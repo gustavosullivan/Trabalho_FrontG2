@@ -113,7 +113,6 @@ Latitude: ${marker.latitude}
 Longitude: ${marker.longitude}
     `);
 
-        console.log("PONTO CLICADO:", marker);
     };
 
     if (!userLocation) {
